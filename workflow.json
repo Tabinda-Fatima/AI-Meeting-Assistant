@@ -1,0 +1,307 @@
+
+{
+  "name": "AI Meeting Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "AI Meeting Assistant",
+        "formDescription": "Enter your meeting details to generate an AI summary and action items.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Meeting Title",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Meeting Notes",
+              "fieldType": "textarea",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -416,
+        -48
+      ],
+      "id": "74e664c8-aa18-4b84-a14e-4171b1417f4e",
+      "name": "On form submission",
+      "webhookId": "9807a016-c816-4558-8db3-2cfa0f0c9040"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Meeting Title: {{ $json[\"Meeting Title\"] }}\n\nMeeting Notes:\n{{ $json[\"Meeting Notes\"] }}\n\nGenerate:\n1. Professional Summary\n2. Key Decisions\n3. Action Items\n4. Next Steps\n\nReturn only plain text.\n\nFormat:\n\nSummary:\n...\n\nKey Decisions:\n...\n\nAction Items:\n...\n\nNext Steps:\n...\n\nDo not use Markdown, headings (#), bullets (*), or code blocks.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a professional AI Meeting Assistant. Analyze meeting notes clearly and accurately."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -208,
+        -48
+      ],
+      "id": "a9a56bf2-dcfb-4739-9d15-b8fc01b56dc7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -208,
+        176
+      ],
+      "id": "ee96eea2-75a9-4e27-939a-6ceefa120bf5",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Y9QbgexmhRzsWHjn",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ulwKie4OYKcUsFxOidCNApvg9VILOp4SqKM0OhqJETg",
+          "mode": "list",
+          "cachedResultName": "AI Meeting Assistant",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ulwKie4OYKcUsFxOidCNApvg9VILOp4SqKM0OhqJETg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ulwKie4OYKcUsFxOidCNApvg9VILOp4SqKM0OhqJETg/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Meeting Title": "={{ $('On form submission').item.json['Meeting Title'] }}",
+            "Meeting Notes": "={{ $('On form submission').item.json['Meeting Notes'] }}",
+            "Email": "={{ $('On form submission').item.json.Email }}",
+            "Summary": "={{ $('AI Agent').item.json.output.summary }}",
+            "Key Decisions": "={{ $('AI Agent').item.json.output.key_decisions }}",
+            "Action Items": "={{ $('AI Agent').item.json.output.action_items }}",
+            "Next Steps": "={{ $('AI Agent').item.json.output.next_steps }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Meeting Title",
+              "displayName": "Meeting Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Meeting Notes",
+              "displayName": "Meeting Notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Key Decisions",
+              "displayName": "Key Decisions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Action Items",
+              "displayName": "Action Items",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Next Steps",
+              "displayName": "Next Steps",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        144,
+        -48
+      ],
+      "id": "bd381a2f-d74a-44bd-aecf-6648ad142746",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "PIPdQXtLdpcu5Sju",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json['Email'] }}",
+        "subject": "Meeting Summary & Action Items | AI Meeting Assistant",
+        "message": "=<h2>Your Meeting Summary</h2>\n\n<p>Hello <b>{{ $('On form submission').item.json['Name'] }}</b>,</p>\n<p>Your meeting has been processed successfully.</p>\n\n<hr>\n\n<p><b>Summary:</b><br>\n{{ $('AI Agent').item.json.output.summary }}</p>\n\n<p><b>Key Decisions:</b><br>\n{{ $('AI Agent').item.json.output.key_decisions }}</p>\n\n<p><b>Action Items:</b><br>\n{{ $('AI Agent').item.json.output.action_items }}</p>\n\n<p><b>Next Steps:</b><br>\n{{ $('AI Agent').item.json.output.next_steps }}</p>\n\n<hr>\n\n<p>Thank you for using <b>AI Meeting Assistant</b>.</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        -48
+      ],
+      "id": "fb1af558-0229-4ea8-89e3-47eab0dd7bb5",
+      "name": "Send a message",
+      "webhookId": "993ecc31-ad46-4e81-a676-118850da2e68",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "MIQMe9HDgH6S2ASk",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"summary\": \"The team reviewed project progress and discussed the remaining development work.\",\n  \"key_decisions\": \"Complete API integration by Friday and begin testing next Monday.\",\n  \"action_items\": \"Sarah will finalize the UI; Ali will complete the API integration; Ahmed will prepare the testing environment.\",\n  \"next_steps\": \"Finish integration, prepare testing, and monitor progress against the deadline.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -64,
+        176
+      ],
+      "id": "679ca1b4-e1ec-46fc-87c9-58cce0281b6b",
+      "name": "Structured Output Parser"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "fbee7758-15d5-486f-a8ce-4f03302a79a0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a8ad93bf907f901eb46eaff2921c110c15254a1d61215cb8fbd748e06c84008e"
+  },
+  "id": "D-P1bsw5M6LXXkuY4jyjB",
+  "tags": []
+}
