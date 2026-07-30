@@ -138,7 +138,7 @@ Gmail
 
 The complete n8n workflow connecting the form, AI Agent, OpenAI model, Structured Output Parser, Google Sheets, and Gmail.
 
-![n8n Workflow](workflow_.png)
+![n8n Workflow][(workflow_.png)](https://github.com/Tabinda-Fatima/AI-Meeting-Assistant/blob/main/workflow..png)
 
 ---
 
