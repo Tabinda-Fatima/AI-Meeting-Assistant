@@ -76,25 +76,11 @@ The workflow is powered by **OpenAI GPT-4.1 Mini** and orchestrated using **n8n*
 ---
 # Screenshots
 
-## n8n Workflow
-
 ![n8n Workflow](workflow.png)
-
----
-
-## Google Sheets Output
 
 ![Google Sheets Output](google-sheet.png)
 
----
-
-## Generated Meeting Records
-
-![Generated Meeting Records](google-sheet1.png)
-
----
-
-## Personalized Email Output
+![](google-sheet1.png)
 
 ![Email Output](email-output.png)
 
