@@ -1,123 +1,272 @@
 # AI Meeting Assistant
 
-An AI-powered meeting documentation workflow built with n8n and OpenAI that transforms raw meeting notes into structured summaries, key decisions, action items, and next steps. The generated information is automatically stored in Google Sheets and delivered to participants via email.
+An AI-powered meeting documentation workflow built with **n8n** and **OpenAI**. It converts raw meeting notes into a structured meeting summary, key decisions, action items, and next steps.
+
+The generated information is automatically stored in Google Sheets and delivered to the user through a personalized Gmail message.
 
 ---
 
-# Problem It Solves
+## Problem It Solves
 
-Taking notes during meetings is easy, but organizing them into clear summaries and actionable follow-ups is often time-consuming.
+Meeting notes often contain important discussions, decisions, responsibilities, and follow-up tasks. Organizing this information manually can be repetitive and time-consuming.
 
-AI Meeting Assistant automates this process by allowing users to submit:
+AI Meeting Assistant automates the entire meeting documentation process.
+
+Users only need to provide:
 
 - Meeting title
 - Meeting notes
 - Name
 - Email address
 
-The workflow analyzes the meeting notes, generates structured documentation, stores the results in Google Sheets, and emails a personalized meeting summary to the user.
+The workflow then analyzes the notes, generates structured meeting documentation, stores the information in Google Sheets, and sends the final summary through email.
 
 ---
 
-# Features
+## Features
 
-- AI-powered meeting summarization
-- Automatic extraction of key decisions
-- Action item generation
+- Form-based meeting detail submission
+- AI-powered meeting note analysis
+- Professional meeting summary generation
+- Automatic identification of key decisions
+- Action item extraction
 - Next-step recommendations
 - Structured AI output
-- Google Sheets integration
-- Gmail email delivery
-- Form-based user interface
-- End-to-end workflow automation
+- Automatic Google Sheets storage
+- Personalized Gmail delivery
+- End-to-end n8n automation
 
 ---
 
-# Workflow Architecture
+## Workflow Architecture
 
-### Form Trigger
+### 1. Form Trigger
 
-Collects meeting details from the user.
+The workflow starts when a user submits the meeting form.
 
-### AI Agent
+The form collects:
 
-Analyzes the meeting notes and generates:
+- Meeting Title
+- Meeting Notes
+- Name
+- Email Address
+
+### 2. AI Agent
+
+The AI Agent analyzes the submitted meeting notes and generates:
 
 - Meeting Summary
 - Key Decisions
 - Action Items
 - Next Steps
 
-### Structured Output Parser
+### 3. OpenAI Chat Model
 
-Converts the AI response into a structured JSON format for reliable downstream processing.
+The workflow uses **OpenAI GPT-4.1 Mini** to understand the meeting notes and create professional meeting documentation.
 
-### Google Sheets
+### 4. Structured Output Parser
 
-Stores all processed meeting information automatically.
+The Structured Output Parser converts the AI response into organized fields:
 
-### Gmail
+- `summary`
+- `key_decisions`
+- `action_items`
+- `next_steps`
 
-Sends a personalized meeting summary to the user's email.
+This ensures that the data can be used reliably by the next workflow nodes.
 
-The workflow is powered by **OpenAI GPT-4.1 Mini** and orchestrated using **n8n**.
+### 5. Google Sheets
 
----
+The processed meeting information is automatically stored in Google Sheets.
 
-# Tech Stack
+The sheet includes:
 
-- n8n
-- OpenAI GPT-4.1 Mini
-- Structured Output Parser
-- Google Sheets
-- Gmail
-- Form Trigger
+- Meeting Title
+- Meeting Notes
+- Email
+- Summary
+- Key Decisions
+- Action Items
+- Next Steps
 
----
-# Screenshots
+### 6. Gmail
 
-![n8n Workflow](workflow.png)
+After the meeting information is stored, Gmail sends a personalized email to the user.
 
-![Google Sheets Output](google-sheet.png)
+The email contains:
 
-![](google-sheet1.png)
-
-![Email Output](email-output.png)
-
----
-
-# How It Works
-
-1. User submits meeting details.
-2. AI analyzes the meeting notes.
-3. Summary, decisions, action items, and next steps are generated.
-4. Results are stored in Google Sheets.
-5. A personalized meeting summary is emailed to the user.
+- Meeting Summary
+- Key Decisions
+- Action Items
+- Next Steps
 
 ---
 
-# Run Locally
-
-1. Import the workflow JSON into n8n.
-2. Configure OpenAI credentials.
-3. Configure Google Sheets credentials.
-4. Configure Gmail credentials.
-5. Activate the workflow.
-6. Submit the meeting form.
-
----
-
-# Repository Structure
+## Workflow Process
 
 ```text
-README.md
-ai-meeting-assistant-workflow.json
-images/
+Meeting Form
+     ↓
+AI Agent
+     ↓
+OpenAI Chat Model
+     ↓
+Structured Output Parser
+     ↓
+Google Sheets
+     ↓
+Gmail
 ```
 
 ---
 
-# 👩‍💻 Author
+## Tech Stack
+
+- n8n
+- OpenAI GPT-4.1 Mini
+- AI Agent
+- Structured Output Parser
+- Google Sheets
+- Gmail
+- n8n Form Trigger
+
+---
+
+## Screenshots
+
+### n8n Workflow
+
+The complete n8n workflow connecting the form, AI Agent, OpenAI model, Structured Output Parser, Google Sheets, and Gmail.
+
+![n8n Workflow](workflow_.png)
+
+---
+
+### Google Sheets Meeting Data
+
+The first section of the generated Google Sheet showing the meeting title, meeting notes, and AI-generated summary.
+
+![Google Sheets Meeting Data](google-sheet.png)
+
+---
+
+### Google Sheets Structured Output
+
+The additional Google Sheets columns containing key decisions, action items, next steps, and email information.
+
+![Google Sheets Structured Output](google-sheet1.png)
+
+---
+
+### Personalized Email Output
+
+The personalized email sent to the user with the meeting summary, key decisions, action items, and next steps.
+
+![Personalized Email Output](email-output.png)
+
+---
+
+## How It Works
+
+1. The user opens the n8n meeting form.
+2. The user enters the meeting title, notes, name, and email address.
+3. The AI Agent analyzes the submitted meeting notes.
+4. OpenAI generates a professional meeting summary.
+5. The Structured Output Parser separates the response into organized fields.
+6. Google Sheets stores the complete meeting information.
+7. Gmail sends the processed meeting summary to the user.
+
+---
+
+## Setup Instructions
+
+### 1. Import the Workflow
+
+Import the workflow JSON file into your n8n instance.
+
+### 2. Configure OpenAI
+
+Add your OpenAI API credentials to the OpenAI Chat Model node.
+
+### 3. Configure Google Sheets
+
+Connect your Google Sheets account and select the required spreadsheet.
+
+The spreadsheet should contain the following columns:
+
+```text
+Meeting Title
+Meeting Notes
+Email
+Summary
+Key Decisions
+Action Items
+Next Steps
+```
+
+### 4. Configure Gmail
+
+Connect your Gmail account to the Gmail node.
+
+### 5. Activate the Workflow
+
+Activate the workflow and open the n8n form URL.
+
+### 6. Submit Meeting Details
+
+Enter the meeting information and submit the form.
+
+The workflow will automatically:
+
+- Analyze the meeting notes
+- Generate structured results
+- Save the data in Google Sheets
+- Send the summary through Gmail
+
+---
+
+## Repository Files
+
+```text
+AI-Meeting-Assistant/
+│
+├── README.md
+├── ai-meeting-assistant-workflow.json
+├── workflow_.png
+├── google-sheet.png
+├── google-sheet1.png
+└── email-output.png
+```
+
+---
+
+## Security Note
+
+Credentials and API keys are not included in this repository.
+
+Users must configure their own:
+
+- OpenAI credentials
+- Google Sheets credentials
+- Gmail credentials
+
+---
+
+## Use Cases
+
+This workflow can be used for:
+
+- Team meetings
+- Project planning meetings
+- Client meetings
+- Weekly progress meetings
+- Strategy meetings
+- Remote team discussions
+- Internal business meetings
+
+---
+
+## Author
 
 **Tabinda Fatima**
 
